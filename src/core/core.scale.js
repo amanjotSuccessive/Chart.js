@@ -713,7 +713,7 @@ module.exports = Element.extend({
 		if (!me._isVisible()) {
 			return;
 		}
-
+console.log("Draw function running")
 		var chart = me.chart;
 		var context = me.ctx;
 		var globalDefaults = defaults.global;
@@ -740,7 +740,7 @@ module.exports = Element.extend({
 
 		var tl = gridLines.drawTicks ? gridLines.tickMarkLength : 0;
 
-		var scaleLabelFontColor = helpers.valueOrDefault(scaleLabel.fontColor, defaultFontColor);
+		var scaleLabelFontColor = 'yellow' //helpers.valueOrDefault(scaleLabel.fontColor, defaultFontColor);
 		var scaleLabelFont = parseFont(scaleLabel);
 		var scaleLabelPadding = helpers.options.toPadding(scaleLabel.padding);
 		var labelRotationRadians = helpers.toRadians(me.labelRotation);
@@ -872,7 +872,7 @@ module.exports = Element.extend({
 		});
 
 		// Draw all of the tick labels, tick marks, and grid lines at the correct places
-		helpers.each(itemsToDraw, function(itemToDraw) {
+		helpers.each(itemsToDraw, function(itemToDraw, index) {
 			var glWidth = itemToDraw.glWidth;
 			var glColor = itemToDraw.glColor;
 
@@ -907,7 +907,11 @@ module.exports = Element.extend({
 				context.translate(itemToDraw.labelX, itemToDraw.labelY);
 				context.rotate(itemToDraw.rotation);
 				context.font = itemToDraw.major ? majorTickFont.string : tickFont.string;
-				context.fillStyle = itemToDraw.major ? majorTickFontColor : tickFontColor;
+				if (Object.prototype.toString.call( tickFontColor ) === '[object Array]') {
+					context.fillStyle = itemToDraw.major ? majorTickFontColor[index] : tickFontColor[index];
+				} else {
+					context.fillStyle = itemToDraw.major ? majorTickFontColor : tickFontColor;
+				}
 				context.textBaseline = 'middle';
 				context.textAlign = itemToDraw.textAlign;
 
